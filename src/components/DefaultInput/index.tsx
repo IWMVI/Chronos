@@ -1,4 +1,4 @@
-import styles from "./stykes.module.css";
+import styles from "./styles.module.css";
 
 type DefaultInputProps = {
   id: string;
