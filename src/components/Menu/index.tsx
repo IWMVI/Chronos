@@ -9,7 +9,6 @@ export function Menu() {
 
   function handleThemeChange() {
     event?.preventDefault();
-    console.log("Clicado", Date.now());
 
     setTheme((prevTheme) => {
       const nextTheme = prevTheme === "dark" ? "light" : "dark";
@@ -18,8 +17,29 @@ export function Menu() {
     // document.documentElement.setAttribute("data-theme", theme);
   }
 
+  /* Usado toda vez que o componente renderiza na tela.
+
+     useEffect(() => {
+       console.log("", Date.now());
+     });
+
+  */
+
+  /* Executa apenas quando o React monta o componente na tela pela 1ª vez
+
+     useEffect(() => {
+       console.log("", Date.now());
+     },[]);
+
+  */
+
+  // Executa apenas quando o valor de "theme" muda.
   useEffect(() => {
-    console.log(Date.now());
+    document.documentElement.setAttribute("data-theme", theme);
+
+    return () => {
+      console.log("Esse componente será atualizado.");
+    }; // Para retirar possíveis "sujeiras" -> Função de "Cleanup"
   }, [theme]);
 
   return (
