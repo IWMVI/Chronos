@@ -1,11 +1,26 @@
-import { HistoryIcon, HouseIcon, SettingsIcon, SunIcon } from "lucide-react";
+import {
+  HistoryIcon,
+  HouseIcon,
+  MoonIcon,
+  SettingsIcon,
+  SunIcon,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 
 type AvailableThemes = "dark" | "light";
 
 export function Menu() {
-  const [theme, setTheme] = useState<AvailableThemes>("dark");
+  const [theme, setTheme] = useState<AvailableThemes>(() => {
+    const storageTheme =
+      (localStorage.getItem("theme") as AvailableThemes) || "dark";
+    return storageTheme;
+  });
+
+  const nextThemeIcon = {
+    dark: <SunIcon />,
+    light: <MoonIcon />,
+  };
 
   function handleThemeChange() {
     event?.preventDefault();
@@ -14,7 +29,6 @@ export function Menu() {
       const nextTheme = prevTheme === "dark" ? "light" : "dark";
       return nextTheme;
     });
-    // document.documentElement.setAttribute("data-theme", theme);
   }
 
   /* Usado toda vez que o componente renderiza na tela.
@@ -36,15 +50,12 @@ export function Menu() {
   // Executa apenas quando o valor de "theme" muda.
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
-
-    return () => {
-      console.log("Esse componente será atualizado.");
-    }; // Para retirar possíveis "sujeiras" -> Função de "Cleanup"
+    localStorage.setItem("theme", theme);
+    return () => {}; // Para retirar possíveis "sujeiras" -> Função de "Cleanup"
   }, [theme]);
 
   return (
     <nav className={styles.menu}>
-      <h1>{theme}</h1>
       <a
         href="#"
         className={styles.menuLink}
@@ -76,7 +87,7 @@ export function Menu() {
         aria-label="Alterar tema"
         onClick={handleThemeChange}
       >
-        <SunIcon />
+        {nextThemeIcon[theme]}
       </a>
     </nav>
   );
